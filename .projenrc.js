@@ -41,12 +41,9 @@ const project = new TypeScriptProject({
     compilerOptions: {
       esModuleInterop: true,
     }
-  }
-
-// LATER WHEN PUBLIC
-  // codeCov: true,
-  // releaseToNpm: true,
-
+  },
+  codeCov: true,
+  releaseToNpm: true,
 });
 
 project.synth();
