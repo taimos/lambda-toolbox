@@ -10,10 +10,18 @@ const project = new TypeScriptProject({
   copyrightPeriod: '2020',
   defaultReleaseBranch: 'main',
   deps: [
-
+    'aws-sdk',
+    'jsonwebtoken',
+    'jwk-to-pem',
+    'axios',
+    'uuid',
   ],
   devDeps: [
-
+    '@types/aws-lambda',
+    'openapi-typescript',
+    '@types/jsonwebtoken',
+    '@types/jwk-to-pem',
+    '@types/uuid',
   ],
   keywords: [
     'aws',
@@ -29,6 +37,11 @@ const project = new TypeScriptProject({
   stability: 'experimental',
   docgen: true,
   typescriptVersion: "^4.1.0",
+  tsconfig: {
+    compilerOptions: {
+      esModuleInterop: true,
+    }
+  }
 
 // LATER WHEN PUBLIC
   // codeCov: true,
