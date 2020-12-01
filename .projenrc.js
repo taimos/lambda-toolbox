@@ -44,6 +44,7 @@ const project = new TypeScriptProject({
   },
   codeCov: true,
   releaseToNpm: true,
+  npmDistTag: 'latest --access public', // Hack to release scoped packages
 });
 
 project.synth();
