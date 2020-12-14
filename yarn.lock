@@ -522,6 +522,13 @@
   dependencies:
     "@sinonjs/commons" "^1.7.0"
 
+"@taimos/projen@^0.0.1":
+  version "0.0.1"
+  resolved "https://registry.yarnpkg.com/@taimos/projen/-/projen-0.0.1.tgz#9eba9ae42f633826034908e32340407c9640febe"
+  integrity sha512-AFp5HvfJmOS6aFuXkhRVcpgNRnHzbIh9/Tq3ALBA3cCvhmnIRnJ5paFwEep9nDIqo9oGSHbTP40DMZfZwVLI9Q==
+  dependencies:
+    projen "^0.6.10"
+
 "@types/aws-lambda@^8.10.64":
   version "8.10.64"
   resolved "https://registry.yarnpkg.com/@types/aws-lambda/-/aws-lambda-8.10.64.tgz#4bdcb725aef96bef0cb1decf19c7efff1df22fe7"
@@ -4595,10 +4602,10 @@ progress@^2.0.0, progress@^2.0.3:
   resolved "https://registry.yarnpkg.com/progress/-/progress-2.0.3.tgz#7e8cf8d8f5b8f239c1bc68beb4eb78567d572ef8"
   integrity sha512-7PiHtLll5LdnKIMw100I+8xJXR5gW2QwWYkT6iJva0bXitZKa/XMrSbdmg3r2Xnaidz9Qumd0VPaMrZlF9V9sA==
 
-projen@^0.5.6:
-  version "0.5.6"
-  resolved "https://registry.yarnpkg.com/projen/-/projen-0.5.6.tgz#298b69c77471cf475f8baf7a4dbd596e79ab7542"
-  integrity sha512-exZaFUE2tPZne06QAVbmLksBmItJFv7b4wygI4dI4QfIVgQ2yKb7vnkFOizWex8dujR4DzUIBoV6LB9rfDpfdA==
+projen@^0.6.10:
+  version "0.6.10"
+  resolved "https://registry.yarnpkg.com/projen/-/projen-0.6.10.tgz#6bdd3b3663afda947abbf758ea6e4343ef0ced18"
+  integrity sha512-VaK5QFgZh2Q1/exRwaz4iAUzzn3qq7Mv9oL2L+Pn8PKvnp8TTS+TPlj7TGH+tTiFl4rXE+O7YiqcuAxVItiNSg==
   dependencies:
     "@iarna/toml" "^2.2.5"
     chalk "^4.1.0"
@@ -4608,7 +4615,7 @@ projen@^0.5.6:
     inquirer "^7.3.3"
     semver "^7.3.2"
     yaml "^1.10.0"
-    yargs "^16.0.3"
+    yargs "^16.1.1"
 
 prompts@^2.0.1:
   version "2.4.0"
@@ -6048,10 +6055,10 @@ yargs@^15.3.1, yargs@^15.4.1:
     y18n "^4.0.0"
     yargs-parser "^18.1.2"
 
-yargs@^16.0.3:
-  version "16.1.1"
-  resolved "https://registry.yarnpkg.com/yargs/-/yargs-16.1.1.tgz#5a4a095bd1ca806b0a50d0c03611d38034d219a1"
-  integrity sha512-hAD1RcFP/wfgfxgMVswPE+z3tlPFtxG8/yWUrG2i17sTWGCGqWnxKcLTF4cUKDUK8fzokwsmO9H0TDkRbMHy8w==
+yargs@^16.1.1:
+  version "16.2.0"
+  resolved "https://registry.yarnpkg.com/yargs/-/yargs-16.2.0.tgz#1c82bf0f6b6a66eafce7ef30e376f49a12477f66"
+  integrity sha512-D1mvvtDG0L5ft/jGWkLpG1+m0eQxOfaBvTNELraWj22wSVUMWxZUvYgJYcKh6jGGIkJFhH4IZPQhR4TKpc8mBw==
   dependencies:
     cliui "^7.0.2"
     escalade "^3.1.1"

@@ -1,14 +1,7 @@
-const { TypeScriptProject } = require('projen');
+const { TaimosTypescriptLibrary } = require('@taimos/projen');
 
-const project = new TypeScriptProject({
-  authorName: 'Taimos GmbH',
-  authorEmail: 'info@taimos.de',
-  authorOrganization: true,
-  authorUrl: 'https://taimos.de',
+const project = new TaimosTypescriptLibrary({
   name: "@taimos/lambda-toolbox",
-  copyrightOwner: 'Taimos GmbH',
-  copyrightPeriod: '2020',
-  defaultReleaseBranch: 'main',
   deps: [
     'aws-sdk',
     'jsonwebtoken',
@@ -22,29 +15,14 @@ const project = new TypeScriptProject({
     '@types/jsonwebtoken',
     '@types/jwk-to-pem',
     '@types/uuid',
+    '@taimos/projen',
   ],
   keywords: [
     'aws',
     'lambda',
     'dynamodb',
   ],
-  releaseBranches: [
-    'main',
-  ],
-  license: 'Apache-2.0',
-  licensed: true,
   repository: 'https://github.com/taimos/lambda-toolbox',
-  stability: 'experimental',
-  docgen: true,
-  typescriptVersion: "^4.1.0",
-  tsconfig: {
-    compilerOptions: {
-      esModuleInterop: true,
-    }
-  },
-  codeCov: true,
-  releaseToNpm: true,
-  npmDistTag: 'latest --access public', // Hack to release scoped packages
 });
 
 project.synth();
