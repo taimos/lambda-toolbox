@@ -1,7 +1,7 @@
 const { TaimosTypescriptLibrary } = require('@taimos/projen');
 
 const project = new TaimosTypescriptLibrary({
-  name: "@taimos/lambda-toolbox",
+  name: '@taimos/lambda-toolbox',
   deps: [
     'aws-sdk',
     'jsonwebtoken',
