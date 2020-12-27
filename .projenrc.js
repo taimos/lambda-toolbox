@@ -23,6 +23,13 @@ const project = new TaimosTypescriptLibrary({
     'dynamodb',
   ],
   repository: 'https://github.com/taimos/lambda-toolbox',
+  jestOptions: {
+    typescriptConfig: {
+      compilerOptions: {
+        esModuleInterop: true,
+      },
+    },
+  },
 });
 
 project.synth();
