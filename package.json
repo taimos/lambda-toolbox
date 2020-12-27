@@ -8,7 +8,9 @@
   "scripts": {
     "projen": "npx projen",
     "start": "npx projen start",
+    "clobber": "npx projen clobber",
     "compile": "npx projen compile",
+    "test:compile": "npx projen test:compile",
     "test": "npx projen test",
     "build": "npx projen build",
     "bump": "npx projen bump",
@@ -28,7 +30,7 @@
     "organization": true
   },
   "devDependencies": {
-    "@taimos/projen": "^0.0.1",
+    "@taimos/projen": "^0.0.11",
     "@types/aws-lambda": "^8.10.64",
     "@types/jest": "^26.0.15",
     "@types/jsonwebtoken": "^8.5.0",
@@ -45,7 +47,7 @@
     "jest-junit": "^12",
     "json-schema": "^0.2.5",
     "openapi-typescript": "^2.4.2",
-    "projen": "^0.6.10",
+    "projen": "^0.9.2",
     "standard-version": "^9.0.0",
     "ts-jest": "^26.4.4",
     "typedoc": "^0.19.2",
