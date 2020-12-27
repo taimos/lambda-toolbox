@@ -2,6 +2,19 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.0.14](https://github.com/taimos/lambda-toolbox/compare/v0.0.12...v0.0.14) (2020-12-27)
+
+
+### Features
+
+* generic PK,SK ([d5ee7cf](https://github.com/taimos/lambda-toolbox/commit/d5ee7cf93eb7375ccb7495a4e1484527740fcd07))
+* HTTP handler without response ([449ac37](https://github.com/taimos/lambda-toolbox/commit/449ac37fd548052a193d8e612169b33cf027c332))
+
+
+### Bug Fixes
+
+* jest ([23e08bd](https://github.com/taimos/lambda-toolbox/commit/23e08bd75a8fe07be30c700254d778d797787aa0))
+
 ### 0.0.13 (2020-12-24)
 
 ### 0.0.12 (2020-12-23)
