@@ -25,7 +25,7 @@ export interface Operation {
   responses: {
     [statusCode: number]: {
       'application/json': any;
-    };
+    } | any;
   };
 }
 
@@ -34,6 +34,10 @@ export interface OperationWithRequestBody extends Operation {
 }
 
 export const createOpenApiHandlerWithRequestBody = <OP extends OperationWithRequestBody, SC extends number>(handler: HttpHandler<OP['requestBody']['application/json'], OP['responses'][SC]['application/json']>): lambda.Handler<lambda.APIGatewayProxyEventV2, lambda.APIGatewayProxyStructuredResultV2 | undefined> => {
+  return createHttpHandler(handler);
+};
+
+export const createOpenApiHandlerWithRequestBodyNoResponse = <OP extends OperationWithRequestBody>(handler: HttpHandler<OP['requestBody']['application/json'], void>): lambda.Handler<lambda.APIGatewayProxyEventV2, lambda.APIGatewayProxyStructuredResultV2 | undefined> => {
   return createHttpHandler(handler);
 };
 
