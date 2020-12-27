@@ -10,7 +10,7 @@ export const dynamoClient: DynamoDB.DocumentClient = new DynamoDB.DocumentClient
 
 export const TABLE_NAME: string = env.TABLE!;
 
-export async function get<E extends PrimaryEntity>(pk: string, sk: string, options?: Omit<DynamoDB.DocumentClient.GetItemInput, 'TableName' | 'Key'>): Promise<E | undefined> {
+export async function get<E extends PrimaryEntity<any, any>>(pk: any, sk: any, options?: Omit<DynamoDB.DocumentClient.GetItemInput, 'TableName' | 'Key'>): Promise<E | undefined> {
   const res = await dynamoClient.get({
     TableName: TABLE_NAME,
     Key: {
