@@ -9,6 +9,7 @@ const project = new TaimosTypescriptLibrary({
     'axios',
     'uuid',
   ],
+  docgen: false,
   devDeps: [
     '@types/aws-lambda',
     'openapi-typescript',
