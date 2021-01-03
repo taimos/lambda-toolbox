@@ -80,6 +80,7 @@ export const createHttpHandler =
             body: error.message,
           };
         }
+        console.error(error);
         return {
           statusCode: ctx.response.statusCode ?? 500,
           headers: {
