@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.0.18](https://github.com/taimos/lambda-toolbox/compare/v0.0.17...v0.0.18) (2021-01-03)
+
+
+### Features
+
+* log errors in handler middleware ([27ea150](https://github.com/taimos/lambda-toolbox/commit/27ea1508108a76ab81994776971b775ce477b855))
+
 ### [0.0.17](https://github.com/taimos/lambda-toolbox/compare/v0.0.16...v0.0.17) (2021-01-01)
 
 ### [0.0.16](https://github.com/taimos/lambda-toolbox/compare/v0.0.14...v0.0.16) (2020-12-30)
