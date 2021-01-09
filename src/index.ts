@@ -1,3 +1,3 @@
-export * from './types';
-export * from './dynamodb';
-export * from './http';
+export * as errors from './types/errors';
+export * as dynamodb from './dynamodb';
+export * as http from './http';

@@ -1,7 +1,7 @@
 /* eslint-disable */
 import * as lambda from 'aws-lambda';
 /* eslint-enable */
-import * as errors from '../types';
+import * as errors from '../types/errors';
 import { CognitoAuthorizer } from './auth';
 
 export interface HttpResponseContext {

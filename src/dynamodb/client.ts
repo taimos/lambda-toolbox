@@ -10,7 +10,7 @@ export const dynamoClient: DynamoDB.DocumentClient = new DynamoDB.DocumentClient
 
 export const TABLE_NAME: string = env.TABLE!;
 
-export async function get<E extends PrimaryEntity<any, any>>(pk: any, sk: any, options?: Omit<DynamoDB.DocumentClient.GetItemInput, 'TableName' | 'Key'>): Promise<E | undefined> {
+export async function getItem<E extends PrimaryEntity<any, any>>(pk: any, sk: any, options?: Omit<DynamoDB.DocumentClient.GetItemInput, 'TableName' | 'Key'>): Promise<E | undefined> {
   const res = await dynamoClient.get({
     TableName: TABLE_NAME,
     Key: {
@@ -20,6 +20,43 @@ export async function get<E extends PrimaryEntity<any, any>>(pk: any, sk: any, o
     ...options,
   }).promise();
   return res.Item ? res.Item as E : undefined;
+}
+
+export async function deleteItem(pk: any, sk: any, options?: Omit<DynamoDB.DocumentClient.DeleteItemInput, 'TableName' | 'Key'>): Promise<void> {
+  await dynamoClient.delete({
+    TableName: TABLE_NAME,
+    Key: {
+      PK: pk,
+      SK: sk,
+    },
+    ...options,
+  }).promise();
+}
+
+export async function putNewItem<E extends PrimaryEntity<any, any>>(pk: any, sk: any, item: Omit<E, 'PK' | 'SK'>): Promise<E> {
+  const Item = {
+    PK: pk,
+    SK: sk,
+    ...item,
+  };
+  await dynamoClient.put({
+    TableName: TABLE_NAME,
+    Item,
+    ConditionExpression: 'attribute_not_exists(PK) and attribute_not_exists(SK)',
+  }).promise();
+  return Item as E;
+}
+
+export async function updateExistingItem<E extends PrimaryEntity<any, any>>(pk: any, sk: any, item: Partial<E>): Promise<E | undefined> {
+  const res = await dynamoClient.update(createUpdate<E>({
+    Key: {
+      PK: pk,
+      SK: sk,
+    },
+    ConditionExpression: 'attribute_exists(PK) and attribute_exists(SK)',
+    ReturnValues: 'ALL_NEW',
+  }, item)).promise();
+  return res.Attributes ? res.Attributes as E : undefined;
 }
 
 export async function pagedQuery<T>(query: Omit<DynamoDB.DocumentClient.QueryInput, 'TableName'>): Promise<T[]> {

@@ -110,18 +110,26 @@ export class CognitoAuthorizer {
     }
   }
 
-  public isAdmin(): boolean {
+  public hasGroup(group: string): boolean {
     // 'cognito:groups': [ 'admin' ],
     return this.isAuthenticated()
       && this.event.requestContext.authorizer!.jwt!.claims.hasOwnProperty('cognito:groups')
-      && (this.event.requestContext.authorizer!.jwt!.claims['cognito:groups'] as unknown as string[]).includes('admin');
+      && (this.event.requestContext.authorizer!.jwt!.claims['cognito:groups'] as unknown as string[]).includes(group);
+  }
+
+  public assertGroup(group: string): void {
+    this.assertAuthenticated();
+    if (!this.hasGroup(group)) {
+      throw new ForbiddenError();
+    }
+  }
+
+  public isAdmin(): boolean {
+    return this.hasGroup('admin');
   }
 
   public assertAdmin(): void {
-    this.assertAuthenticated();
-    if (!this.isAdmin()) {
-      throw new ForbiddenError();
-    }
+    this.assertGroup('admin');
   }
 
   public getEMail(): string {
@@ -129,5 +137,9 @@ export class CognitoAuthorizer {
     return this.event.requestContext.authorizer!.jwt!.claims.email as string;
   }
 
+  public getSubject(): string {
+    this.assertAuthenticated();
+    return this.event.requestContext.authorizer!.jwt!.claims.sub as string;
+  }
 }
 
