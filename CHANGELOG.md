@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.0.24](https://github.com/taimos/lambda-toolbox/compare/v0.0.22...v0.0.24) (2021-01-09)
+
+
+### Features
+
+* dynamodb features ([b8f9645](https://github.com/taimos/lambda-toolbox/commit/b8f96457660f7e95933c2bac90b714a838ebaa45))
+
 ### [0.0.23](https://github.com/taimos/lambda-toolbox/compare/v0.0.22...v0.0.23) (2021-01-08)
 
 ### [0.0.22](https://github.com/taimos/lambda-toolbox/compare/v0.0.19...v0.0.22) (2021-01-07)
