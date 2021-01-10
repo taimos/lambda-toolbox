@@ -10,7 +10,7 @@ export const dynamoClient: DynamoDB.DocumentClient = new DynamoDB.DocumentClient
 
 export const TABLE_NAME: string = env.TABLE!;
 
-export async function getItem<E extends PrimaryEntity<any, any>>(pk: any, sk: any, options?: Omit<DynamoDB.DocumentClient.GetItemInput, 'TableName' | 'Key'>): Promise<E | undefined> {
+export async function getItem<E extends PrimaryEntity<any, any>>(pk: E['PK'], sk: E['SK'], options?: Omit<DynamoDB.DocumentClient.GetItemInput, 'TableName' | 'Key'>): Promise<E | undefined> {
   const res = await dynamoClient.get({
     TableName: TABLE_NAME,
     Key: {
@@ -22,7 +22,7 @@ export async function getItem<E extends PrimaryEntity<any, any>>(pk: any, sk: an
   return res.Item ? res.Item as E : undefined;
 }
 
-export async function deleteItem(pk: any, sk: any, options?: Omit<DynamoDB.DocumentClient.DeleteItemInput, 'TableName' | 'Key'>): Promise<void> {
+export async function deleteItem<E extends PrimaryEntity<any, any>>(pk: E['PK'], sk: E['SK'], options?: Omit<DynamoDB.DocumentClient.DeleteItemInput, 'TableName' | 'Key'>): Promise<void> {
   await dynamoClient.delete({
     TableName: TABLE_NAME,
     Key: {
@@ -33,7 +33,7 @@ export async function deleteItem(pk: any, sk: any, options?: Omit<DynamoDB.Docum
   }).promise();
 }
 
-export async function putNewItem<E extends PrimaryEntity<any, any>>(pk: any, sk: any, item: Omit<E, 'PK' | 'SK'>): Promise<E> {
+export async function putNewItem<E extends PrimaryEntity<any, any>>(pk: E['PK'], sk: E['SK'], item: Omit<E, 'PK' | 'SK'>): Promise<E> {
   const Item = {
     PK: pk,
     SK: sk,
@@ -47,7 +47,7 @@ export async function putNewItem<E extends PrimaryEntity<any, any>>(pk: any, sk:
   return Item as E;
 }
 
-export async function updateExistingItem<E extends PrimaryEntity<any, any>>(pk: any, sk: any, item: Partial<E>): Promise<E | undefined> {
+export async function updateExistingItem<E extends PrimaryEntity<any, any>>(pk: E['PK'], sk: E['SK'], item: Partial<E>): Promise<E | undefined> {
   const res = await dynamoClient.update(createUpdate<E>({
     Key: {
       PK: pk,
