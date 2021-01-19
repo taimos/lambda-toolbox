@@ -28,7 +28,7 @@
     "organization": true
   },
   "devDependencies": {
-    "@taimos/projen": "^0.0.18",
+    "@taimos/projen": "^0.0.27",
     "@types/aws-lambda": "^8.10.68",
     "@types/jest": "^26.0.19",
     "@types/jsonwebtoken": "^8.5.0",
@@ -45,7 +45,7 @@
     "jest-junit": "^12",
     "json-schema": "^0.3.0",
     "openapi-typescript": "^2.4.2",
-    "projen": "^0.12.15",
+    "projen": "^0.15.7",
     "standard-version": "^9.0.0",
     "ts-jest": "^26.4.4",
     "typescript": "^4.1.0"
@@ -67,8 +67,18 @@
   "license": "Apache-2.0",
   "version": "0.0.31",
   "jest": {
+    "testMatch": [
+      "**/__tests__/**/*.ts?(x)",
+      "**/?(*.)+(spec|test).ts?(x)"
+    ],
     "clearMocks": true,
     "collectCoverage": true,
+    "coverageReporters": [
+      "json",
+      "lcov",
+      "clover",
+      "text"
+    ],
     "coverageDirectory": "coverage",
     "coveragePathIgnorePatterns": [
       "/node_modules/"
@@ -76,9 +86,8 @@
     "testPathIgnorePatterns": [
       "/node_modules/"
     ],
-    "testMatch": [
-      "**/__tests__/**/*.ts?(x)",
-      "**/?(*.)+(spec|test).ts?(x)"
+    "watchPathIgnorePatterns": [
+      "/node_modules/"
     ],
     "reporters": [
       "default",
