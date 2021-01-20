@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.0.32](https://github.com/taimos/lambda-toolbox/compare/v0.0.30...v0.0.32) (2021-01-20)
+
+
+### Features
+
+* appsync support ([17a68b5](https://github.com/taimos/lambda-toolbox/commit/17a68b55ee3d804871a297ccbb7d0fddee6cb966))
+
 ### [0.0.31](https://github.com/taimos/lambda-toolbox/compare/v0.0.30...v0.0.31) (2021-01-19)
 
 ### [0.0.30](https://github.com/taimos/lambda-toolbox/compare/v0.0.28...v0.0.30) (2021-01-18)
