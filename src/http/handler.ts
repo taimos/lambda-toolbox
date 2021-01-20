@@ -2,7 +2,7 @@
 import * as lambda from 'aws-lambda';
 /* eslint-enable */
 import * as errors from '../types/errors';
-import { CognitoAuthorizer } from './auth';
+import { ApiGatewayv2CognitoAuthorizer, AppSyncCognitoAuthorizer, CognitoAuthorizer } from './auth';
 
 export interface HttpResponseContext {
   statusCode?: number;
@@ -52,7 +52,7 @@ export const createHttpHandler =
         event,
         lambdaContext: context,
         response: { headers: {} },
-        cognitoAuth: new CognitoAuthorizer(event),
+        cognitoAuth: new ApiGatewayv2CognitoAuthorizer(event),
       };
 
       try {
@@ -110,3 +110,37 @@ function corsHeader(event: lambda.APIGatewayProxyEventV2): { [name: string]: str
     'Access-Control-Allow-Headers': 'Authorization, *',
   };
 }
+
+/////////////////////////////////
+/// AppSync
+/////////////////////////////////
+
+export interface AppSyncHandlerContext<T> {
+  event: lambda.AppSyncResolverEvent<T>;
+  lambdaContext: lambda.Context;
+  cognitoAuth: CognitoAuthorizer;
+}
+
+export type AppSyncHandler<T, R> = (
+  context: AppSyncHandlerContext<T>,
+) => Promise<R>;
+
+export const createAppSyncHandler =
+  <T, R>(handler: AppSyncHandler<T, R>): lambda.AppSyncResolverHandler<T, R> => {
+    return async (event, context) => {
+      const ctx: AppSyncHandlerContext<T> = {
+        event,
+        lambdaContext: context,
+        cognitoAuth: new AppSyncCognitoAuthorizer(event),
+      };
+
+      try {
+        await ctx.cognitoAuth.authenticate();
+        return await handler(ctx);
+      } catch (error) {
+        console.error(error);
+        throw error;
+      }
+    };
+  };
+

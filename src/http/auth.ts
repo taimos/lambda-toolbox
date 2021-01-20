@@ -1,6 +1,6 @@
 import { env } from 'process';
 /* eslint-disable */
-import { APIGatewayProxyEventV2 } from 'aws-lambda';
+import { APIGatewayProxyEventV2, AppSyncIdentityCognito, AppSyncResolverEvent } from 'aws-lambda';
 /* eslint-enable */
 import Axios from 'axios';
 import { verify, JwtHeader, SigningKeyCallback } from 'jsonwebtoken';
@@ -70,38 +70,14 @@ const promisedVerify = (token: string): Promise<{ [name: string]: string }> => {
   });
 };
 
-export class CognitoAuthorizer {
+export abstract class CognitoAuthorizer {
 
-  constructor(protected event: APIGatewayProxyEventV2) {
-    //
-  }
+  protected claims?:{ [name: string]: string | number | boolean | string[] };
 
-  public async authenticate(): Promise<void> {
-    if (!cognitoPoolId || (this.event.requestContext.authorizer && this.event.requestContext.authorizer.jwt)) {
-      return;
-    }
-    const authHeader = this.event.headers.authorization;
-    if (!authHeader || !authHeader.startsWith('Bearer ')) {
-      return;
-    }
-    const token = authHeader.substr('Bearer '.length);
-    try {
-      const claims: { [name: string]: string } = await promisedVerify(token);
-      console.log(claims);
-
-      this.event.requestContext.authorizer = {
-        jwt: {
-          claims,
-          scopes: ['openid', 'email'],
-        },
-      };
-    } catch (err) {
-      console.log(err);
-    }
-  }
+  public abstract authenticate(): Promise<void>;
 
   public isAuthenticated(): boolean {
-    return this.event.requestContext.authorizer !== undefined && this.event.requestContext.authorizer.jwt !== undefined;
+    return this.claims !== undefined;
   }
 
   public assertAuthenticated(): void {
@@ -113,8 +89,8 @@ export class CognitoAuthorizer {
   public hasGroup(group: string): boolean {
     // 'cognito:groups': [ 'admin' ],
     return this.isAuthenticated()
-      && this.event.requestContext.authorizer!.jwt!.claims.hasOwnProperty('cognito:groups')
-      && (this.event.requestContext.authorizer!.jwt!.claims['cognito:groups'] as unknown as string[]).includes(group);
+      && this.claims!.hasOwnProperty('cognito:groups')
+      && (this.claims!['cognito:groups'] as unknown as string[]).includes(group);
   }
 
   public assertGroup(group: string): void {
@@ -134,12 +110,60 @@ export class CognitoAuthorizer {
 
   public getEMail(): string {
     this.assertAuthenticated();
-    return this.event.requestContext.authorizer!.jwt!.claims.email as string;
+    return this.claims!.email as string;
   }
 
   public getSubject(): string {
     this.assertAuthenticated();
-    return this.event.requestContext.authorizer!.jwt!.claims.sub as string;
+    return this.claims!.sub as string;
   }
 }
 
+export class ApiGatewayv2CognitoAuthorizer extends CognitoAuthorizer {
+
+  constructor(protected event: APIGatewayProxyEventV2) {
+    super();
+  }
+
+  public async authenticate(): Promise<void> {
+    this.claims = this.event.requestContext.authorizer?.jwt?.claims;
+
+    if (!cognitoPoolId || this.claims) {
+      return;
+    }
+    const authHeader = this.event.headers.authorization;
+    if (!authHeader || !authHeader.startsWith('Bearer ')) {
+      return;
+    }
+    const token = authHeader.substr('Bearer '.length);
+    try {
+      const claims: { [name: string]: string } = await promisedVerify(token);
+      console.log(claims);
+
+      this.event.requestContext.authorizer = {
+        jwt: {
+          claims,
+          scopes: ['openid', 'email'],
+        },
+      };
+      this.claims = claims;
+    } catch (err) {
+      console.log(err);
+    }
+  }
+
+}
+
+export class AppSyncCognitoAuthorizer extends CognitoAuthorizer {
+
+  constructor(protected event: AppSyncResolverEvent<any>) {
+    super();
+  }
+
+  public async authenticate(): Promise<void> {
+    if (this.event.identity) {
+      this.claims = (this.event.identity as AppSyncIdentityCognito).claims;
+    }
+  }
+
+}
