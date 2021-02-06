@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.0.45](https://github.com/taimos/lambda-toolbox/compare/v0.0.44...v0.0.45) (2021-02-06)
+
+
+### Features
+
+* **ddb:** export field constants ([b824f23](https://github.com/taimos/lambda-toolbox/commit/b824f23f1d763714ad1d41748de1da57499eb2c7))
+* **http:** enable non json response ([9e32938](https://github.com/taimos/lambda-toolbox/commit/9e32938dc8b2fd834118801b6ade31b087b92184))
+
 ### [0.0.44](https://github.com/taimos/lambda-toolbox/compare/v0.0.43...v0.0.44) (2021-02-05)
 
 ### [0.0.43](https://github.com/taimos/lambda-toolbox/compare/v0.0.42...v0.0.43) (2021-02-04)
