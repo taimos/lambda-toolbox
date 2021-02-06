@@ -4,9 +4,15 @@ import * as lambda from 'aws-lambda';
 import * as errors from '../types/errors';
 import { ApiGatewayv2CognitoAuthorizer, AppSyncCognitoAuthorizer, CognitoAuthorizer } from './auth';
 
+
+/////////////////////////////////
+/// HTTP Api
+/////////////////////////////////
+
 export interface HttpResponseContext {
   statusCode?: number;
   headers: { [name: string]: string };
+  json: boolean;
 }
 
 export interface HttpHandlerContext {
@@ -33,7 +39,7 @@ export interface OperationWithRequestBody extends Operation {
   requestBody: { 'application/json': any };
 }
 
-export const createOpenApiHandlerWithRequestBody = <OP extends OperationWithRequestBody, SC extends number>(handler: HttpHandler<OP['requestBody']['application/json'], OP['responses'][SC]['application/json']>): lambda.Handler<lambda.APIGatewayProxyEventV2, lambda.APIGatewayProxyStructuredResultV2 | undefined> => {
+export const createOpenApiHandlerWithRequestBody = <OP extends OperationWithRequestBody, SC extends number = 200>(handler: HttpHandler<OP['requestBody']['application/json'], OP['responses'][SC]['application/json']>): lambda.Handler<lambda.APIGatewayProxyEventV2, lambda.APIGatewayProxyStructuredResultV2 | undefined> => {
   return createHttpHandler(handler);
 };
 
@@ -41,7 +47,7 @@ export const createOpenApiHandlerWithRequestBodyNoResponse = <OP extends Operati
   return createHttpHandler(handler);
 };
 
-export const createOpenApiHandler = <OP extends Operation, SC extends number>(handler: HttpHandler<any, OP['responses'][SC]['application/json']>): lambda.Handler<lambda.APIGatewayProxyEventV2, lambda.APIGatewayProxyStructuredResultV2 | undefined> => {
+export const createOpenApiHandler = <OP extends Operation, SC extends number = 200>(handler: HttpHandler<any, OP['responses'][SC]['application/json']>): lambda.Handler<lambda.APIGatewayProxyEventV2, lambda.APIGatewayProxyStructuredResultV2 | undefined> => {
   return createHttpHandler(handler);
 };
 
@@ -51,7 +57,7 @@ export const createHttpHandler =
       const ctx: HttpHandlerContext = {
         event,
         lambdaContext: context,
-        response: { headers: {} },
+        response: { headers: {}, json: true },
         cognitoAuth: new ApiGatewayv2CognitoAuthorizer(event),
       };
 
@@ -66,7 +72,7 @@ export const createHttpHandler =
             ...corsHeader(event),
             ...ctx.response.headers,
           },
-          body: res ? JSON.stringify(res) : '',
+          body: res ? (ctx.response.json ? JSON.stringify(res) : res) : '',
         };
       } catch (error) {
         if (error instanceof errors.HttpError) {
