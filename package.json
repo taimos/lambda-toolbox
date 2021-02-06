@@ -28,7 +28,7 @@
     "organization": true
   },
   "devDependencies": {
-    "@taimos/projen": "^0.0.27",
+    "@taimos/projen": "^0.0.35",
     "@types/aws-lambda": "^8.10.68",
     "@types/jest": "^26.0.19",
     "@types/jsonwebtoken": "^8.5.0",
@@ -45,7 +45,7 @@
     "jest-junit": "^12",
     "json-schema": "^0.3.0",
     "openapi-typescript": "^2.4.2",
-    "projen": "^0.15.7",
+    "projen": "^0.15.18",
     "standard-version": "^9.0.0",
     "ts-jest": "^26.4.4",
     "typescript": "^4.1.0"
@@ -66,6 +66,9 @@
   "main": "lib/index.js",
   "license": "Apache-2.0",
   "version": "0.0.44",
+  "publishConfig": {
+    "tag": "latest --access public"
+  },
   "jest": {
     "testMatch": [
       "**/__tests__/**/*.ts?(x)",
