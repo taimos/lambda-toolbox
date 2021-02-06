@@ -10,3 +10,8 @@ export interface GSI1Entity<P, S> {
 }
 
 export const IndexName_GSI1 = 'GSI1';
+export const IndexName_GSI1_PK = 'GSI1PK';
+export const IndexName_GSI1_SK = 'GSI1SK';
+
+export const Primary_PK = 'PK';
+export const Primary_SK = 'SK';

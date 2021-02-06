@@ -93,6 +93,10 @@ export async function pagedScan<T>(query: Omit<DynamoDB.DocumentClient.ScanInput
   return result;
 }
 
+/**
+ * @deprecated
+ * @param val -
+ */
 export function padLeftZeros(val: number | string | undefined) {
   return ('00' + val).slice(-2);
 }
