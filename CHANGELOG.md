@@ -2,6 +2,8 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.0.59](https://github.com/taimos/lambda-toolbox/compare/v0.0.58...v0.0.59) (2021-03-04)
+
 ### [0.0.58](https://github.com/taimos/lambda-toolbox/compare/v0.0.56...v0.0.58) (2021-03-03)
 
 ### [0.0.57](https://github.com/taimos/lambda-toolbox/compare/v0.0.56...v0.0.57) (2021-03-02)
