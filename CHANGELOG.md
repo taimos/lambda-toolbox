@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.0.72](https://github.com/taimos/lambda-toolbox/compare/v0.0.71...v0.0.72) (2021-03-19)
+
+
+### Bug Fixes
+
+* schema change in openapi ([a29bf6a](https://github.com/taimos/lambda-toolbox/commit/a29bf6a704e11f5b91fd03fde9b92087050c164a))
+
 ### [0.0.71](https://github.com/taimos/lambda-toolbox/compare/v0.0.70...v0.0.71) (2021-03-19)
 
 ### [0.0.70](https://github.com/taimos/lambda-toolbox/compare/v0.0.66...v0.0.70) (2021-03-19)
