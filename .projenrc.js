@@ -8,11 +8,13 @@ const project = new TaimosTypescriptLibrary({
     'jwk-to-pem',
     'axios',
     'uuid',
+    'lambda-log',
   ],
   docgen: false,
   defaultReleaseBranch: 'main',
   devDeps: [
     '@types/aws-lambda',
+    '@types/lambda-log',
     'openapi-typescript',
     '@types/jsonwebtoken',
     '@types/jwk-to-pem',

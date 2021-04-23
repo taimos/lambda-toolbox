@@ -1,5 +1,6 @@
 /* eslint-disable */
 import * as lambda from 'aws-lambda';
+import logger from 'lambda-log';
 /* eslint-enable */
 import * as errors from '../types/errors';
 import { ApiGatewayv2CognitoAuthorizer, AppSyncCognitoAuthorizer, CognitoAuthorizer } from './auth';
@@ -18,6 +19,7 @@ export interface HttpResponseContext {
 export interface HttpHandlerContext {
   event: lambda.APIGatewayProxyEventV2;
   lambdaContext: lambda.Context;
+  logger: logger.LambdaLog;
   response: HttpResponseContext;
   cognitoAuth: CognitoAuthorizer;
 }
@@ -59,9 +61,14 @@ export const createHttpHandler =
       const ctx: HttpHandlerContext = {
         event,
         lambdaContext: context,
+        logger: logger as unknown as logger.LambdaLog,
         response: { headers: {}, json: true },
-        cognitoAuth: new ApiGatewayv2CognitoAuthorizer(event),
+        cognitoAuth: new ApiGatewayv2CognitoAuthorizer(event, logger as unknown as logger.LambdaLog),
       };
+      ctx.logger.options.meta.requestId = context.awsRequestId;
+      ctx.logger.options.debug = process.env.DEBUG === 'true';
+
+      ctx.logger.debug(JSON.stringify(event));
 
       try {
         await ctx.cognitoAuth.authenticate();
@@ -88,7 +95,7 @@ export const createHttpHandler =
             body: error.message,
           };
         }
-        console.error(error);
+        ctx.logger.error(error);
         return {
           statusCode: ctx.response.statusCode ?? 500,
           headers: {
@@ -126,6 +133,7 @@ function corsHeader(event: lambda.APIGatewayProxyEventV2): { [name: string]: str
 export interface AppSyncHandlerContext<T> {
   event: lambda.AppSyncResolverEvent<T>;
   lambdaContext: lambda.Context;
+  logger: logger.LambdaLog;
   cognitoAuth: CognitoAuthorizer;
 }
 
@@ -139,14 +147,19 @@ export const createAppSyncHandler =
       const ctx: AppSyncHandlerContext<T> = {
         event,
         lambdaContext: context,
+        logger: logger as unknown as logger.LambdaLog,
         cognitoAuth: new AppSyncCognitoAuthorizer(event),
       };
+      ctx.logger.options.meta.requestId = context.awsRequestId;
+      ctx.logger.options.debug = process.env.DEBUG === 'true';
+
+      ctx.logger.debug(JSON.stringify(event));
 
       try {
         await ctx.cognitoAuth.authenticate();
         return await handler(ctx);
       } catch (error) {
-        console.error(error);
+        ctx.logger.error(error);
         throw error;
       }
     };

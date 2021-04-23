@@ -21,6 +21,10 @@
       "type": "build"
     },
     {
+      "name": "@types/lambda-log",
+      "type": "build"
+    },
+    {
       "name": "@types/node",
       "version": "^10.17.0",
       "type": "build"
@@ -103,6 +107,10 @@
     },
     {
       "name": "jwk-to-pem",
+      "type": "runtime"
+    },
+    {
+      "name": "lambda-log",
       "type": "runtime"
     },
     {

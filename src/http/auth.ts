@@ -6,6 +6,7 @@ import Axios from 'axios';
 import { verify, JwtHeader, SigningKeyCallback } from 'jsonwebtoken';
 // import jwkToPem = require('jwk-to-pem');
 import jwkToPem from 'jwk-to-pem';
+import logger from 'lambda-log';
 import { ForbiddenError, UnauthenticatedError } from '../types/errors';
 
 const cognitoPoolId = env.USER_POOL_ID ?? '';
@@ -72,7 +73,7 @@ const promisedVerify = (token: string): Promise<{ [name: string]: string }> => {
 
 export abstract class CognitoAuthorizer {
 
-  protected claims?:{ [name: string]: string | number | boolean | string[] };
+  protected claims?: { [name: string]: string | number | boolean | string[] };
 
   public abstract authenticate(): Promise<void>;
 
@@ -121,7 +122,7 @@ export abstract class CognitoAuthorizer {
 
 export class ApiGatewayv2CognitoAuthorizer extends CognitoAuthorizer {
 
-  constructor(protected event: APIGatewayProxyEventV2) {
+  constructor(protected event: APIGatewayProxyEventV2, private _logger: logger.LambdaLog) {
     super();
   }
 
@@ -138,7 +139,7 @@ export class ApiGatewayv2CognitoAuthorizer extends CognitoAuthorizer {
     const token = authHeader.substr('Bearer '.length);
     try {
       const claims: { [name: string]: string } = await promisedVerify(token);
-      console.log(claims);
+      this._logger.debug(JSON.stringify(claims));
 
       this.event.requestContext.authorizer = {
         jwt: {
@@ -148,7 +149,7 @@ export class ApiGatewayv2CognitoAuthorizer extends CognitoAuthorizer {
       };
       this.claims = claims;
     } catch (err) {
-      console.log(err);
+      this._logger.error(err);
     }
   }
 
