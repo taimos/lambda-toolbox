@@ -6,12 +6,12 @@
   },
   "scripts": {
     "clobber": "npx projen clobber",
+    "bump": "npx projen bump",
+    "unbump": "npx projen unbump",
     "compile": "npx projen compile",
     "test:compile": "npx projen test:compile",
     "test": "npx projen test",
     "build": "npx projen build",
-    "bump": "npx projen bump",
-    "release": "npx projen release",
     "test:watch": "npx projen test:watch",
     "test:update": "npx projen test:update",
     "projen:upgrade": "npx projen projen:upgrade",
@@ -28,7 +28,7 @@
     "organization": true
   },
   "devDependencies": {
-    "@taimos/projen": "^0.0.60",
+    "@taimos/projen": "^0.0.90",
     "@types/aws-lambda": "^8.10.73",
     "@types/jest": "^26.0.22",
     "@types/jsonwebtoken": "^8.5.1",
@@ -45,7 +45,7 @@
     "jest-junit": "^12",
     "json-schema": "^0.3.0",
     "openapi-typescript": "^3.2.0",
-    "projen": "^0.17.17",
+    "projen": "^0.17.62",
     "standard-version": "^9",
     "ts-jest": "^26.5.4",
     "typescript": "^4.2.0"
@@ -65,10 +65,10 @@
   ],
   "main": "lib/index.js",
   "license": "Apache-2.0",
-  "version": "0.0.116",
   "publishConfig": {
     "access": "public"
   },
+  "version": "0.0.0",
   "jest": {
     "testMatch": [
       "**/__tests__/**/*.ts?(x)",
