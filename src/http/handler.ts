@@ -1,7 +1,4 @@
-/* eslint-disable */
-import * as lambda from 'aws-lambda';
 import logger from 'lambda-log';
-/* eslint-enable */
 import * as errors from '../types/errors';
 import { ApiGatewayv2CognitoAuthorizer, AppSyncCognitoAuthorizer, CognitoAuthorizer } from './auth';
 
@@ -17,8 +14,8 @@ export interface HttpResponseContext {
 }
 
 export interface HttpHandlerContext {
-  event: lambda.APIGatewayProxyEventV2;
-  lambdaContext: lambda.Context;
+  event: AWSLambda.APIGatewayProxyEventV2;
+  lambdaContext: AWSLambda.Context;
   logger: logger.LambdaLog;
   response: HttpResponseContext;
   cognitoAuth: CognitoAuthorizer;
@@ -39,24 +36,26 @@ export interface Operation {
   };
 }
 
+export type APIGatewayv2Handler = AWSLambda.Handler<AWSLambda.APIGatewayProxyEventV2, AWSLambda.APIGatewayProxyStructuredResultV2 | undefined>;
+
 export interface OperationWithRequestBody extends Operation {
   requestBody: { content: { 'application/json': any } };
 }
 
-export const createOpenApiHandlerWithRequestBody = <OP extends OperationWithRequestBody, SC extends number = 200>(handler: HttpHandler<OP['requestBody']['content']['application/json'], OP['responses'][SC]['application/json']>): lambda.Handler<lambda.APIGatewayProxyEventV2, lambda.APIGatewayProxyStructuredResultV2 | undefined> => {
+export const createOpenApiHandlerWithRequestBody = <OP extends OperationWithRequestBody, SC extends number = 200>(handler: HttpHandler<OP['requestBody']['content']['application/json'], OP['responses'][SC]['application/json']>): APIGatewayv2Handler => {
   return createHttpHandler(handler);
 };
 
-export const createOpenApiHandlerWithRequestBodyNoResponse = <OP extends OperationWithRequestBody>(handler: HttpHandler<OP['requestBody']['content']['application/json'], void>): lambda.Handler<lambda.APIGatewayProxyEventV2, lambda.APIGatewayProxyStructuredResultV2 | undefined> => {
+export const createOpenApiHandlerWithRequestBodyNoResponse = <OP extends OperationWithRequestBody>(handler: HttpHandler<OP['requestBody']['content']['application/json'], void>): APIGatewayv2Handler => {
   return createHttpHandler(handler);
 };
 
-export const createOpenApiHandler = <OP extends Operation, SC extends number = 200>(handler: HttpHandler<any, OP['responses'][SC]['content']['application/json']>): lambda.Handler<lambda.APIGatewayProxyEventV2, lambda.APIGatewayProxyStructuredResultV2 | undefined> => {
+export const createOpenApiHandler = <OP extends Operation, SC extends number = 200>(handler: HttpHandler<any, OP['responses'][SC]['content']['application/json']>): APIGatewayv2Handler => {
   return createHttpHandler(handler);
 };
 
 export const createHttpHandler =
-  <T, R>(handler: HttpHandler<T, R>): lambda.Handler<lambda.APIGatewayProxyEventV2, lambda.APIGatewayProxyStructuredResultV2 | undefined> => {
+  <T, R>(handler: HttpHandler<T, R>): APIGatewayv2Handler => {
     return async (event, context) => {
       const ctx: HttpHandlerContext = {
         event,
@@ -109,7 +108,7 @@ export const createHttpHandler =
     };
   };
 
-function parseBody<T>(event: lambda.APIGatewayProxyEventV2): T {
+function parseBody<T>(event: AWSLambda.APIGatewayProxyEventV2): T {
   if (!event.body || !event.isBase64Encoded) {
     return JSON.parse(event.body ?? '{}');
   }
@@ -117,7 +116,7 @@ function parseBody<T>(event: lambda.APIGatewayProxyEventV2): T {
   return JSON.parse(buff.toString('utf8'));
 }
 
-function corsHeader(event: lambda.APIGatewayProxyEventV2): { [name: string]: string } {
+function corsHeader(event: AWSLambda.APIGatewayProxyEventV2): { [name: string]: string } {
   return {
     'Access-Control-Allow-Origin': event?.headers?.origin ?? '*',
     'Access-Control-Allow-Credentials': event?.headers?.origin ? 'true' : 'false',
@@ -131,8 +130,8 @@ function corsHeader(event: lambda.APIGatewayProxyEventV2): { [name: string]: str
 /////////////////////////////////
 
 export interface AppSyncHandlerContext<T> {
-  event: lambda.AppSyncResolverEvent<T>;
-  lambdaContext: lambda.Context;
+  event: AWSLambda.AppSyncResolverEvent<T>;
+  lambdaContext: AWSLambda.Context;
   logger: logger.LambdaLog;
   cognitoAuth: CognitoAuthorizer;
 }
@@ -142,7 +141,7 @@ export type AppSyncHandler<T, R> = (
 ) => Promise<R>;
 
 export const createAppSyncHandler =
-  <T, R>(handler: AppSyncHandler<T, R>): lambda.AppSyncResolverHandler<T, R> => {
+  <T, R>(handler: AppSyncHandler<T, R>): AWSLambda.AppSyncResolverHandler<T, R> => {
     return async (event, context) => {
       const ctx: AppSyncHandlerContext<T> = {
         event,

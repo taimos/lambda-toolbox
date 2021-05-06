@@ -1,7 +1,4 @@
 import { env } from 'process';
-/* eslint-disable */
-import { APIGatewayProxyEventV2, AppSyncIdentityCognito, AppSyncResolverEvent } from 'aws-lambda';
-/* eslint-enable */
 import Axios from 'axios';
 import { verify, JwtHeader, SigningKeyCallback } from 'jsonwebtoken';
 // import jwkToPem = require('jwk-to-pem');
@@ -122,7 +119,7 @@ export abstract class CognitoAuthorizer {
 
 export class ApiGatewayv2CognitoAuthorizer extends CognitoAuthorizer {
 
-  constructor(protected event: APIGatewayProxyEventV2, private _logger: logger.LambdaLog) {
+  constructor(protected event: AWSLambda.APIGatewayProxyEventV2, private _logger: logger.LambdaLog) {
     super();
   }
 
@@ -157,13 +154,13 @@ export class ApiGatewayv2CognitoAuthorizer extends CognitoAuthorizer {
 
 export class AppSyncCognitoAuthorizer extends CognitoAuthorizer {
 
-  constructor(protected event: AppSyncResolverEvent<any>) {
+  constructor(protected event: AWSLambda.AppSyncResolverEvent<any>) {
     super();
   }
 
   public async authenticate(): Promise<void> {
     if (this.event.identity) {
-      this.claims = (this.event.identity as AppSyncIdentityCognito).claims;
+      this.claims = (this.event.identity as AWSLambda.AppSyncIdentityCognito).claims;
     }
   }
 
