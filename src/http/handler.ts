@@ -109,11 +109,15 @@ export const createHttpHandler =
   };
 
 function parseBody<T>(event: AWSLambda.APIGatewayProxyEventV2): T {
-  if (!event.body || !event.isBase64Encoded) {
-    return JSON.parse(event.body ?? '{}');
+  let body = event.body;
+  if (event.body && event.isBase64Encoded) {
+    const buff = Buffer.from(event.body!, 'base64');
+    body = buff.toString('utf8');
   }
-  const buff = Buffer.from(event.body, 'base64');
-  return JSON.parse(buff.toString('utf8'));
+  if (event.headers && event.headers['content-type']?.includes('application/json')) {
+    return JSON.parse(body ?? '{}');
+  }
+  return body as any;
 }
 
 function corsHeader(event: AWSLambda.APIGatewayProxyEventV2): { [name: string]: string } {
