@@ -84,11 +84,16 @@ export abstract class CognitoAuthorizer {
     }
   }
 
+  public getGroups(): string[] {
+    if (!this.isAuthenticated() || !this.claims!.hasOwnProperty('cognito:groups')) {
+      return [];
+    }
+    return this.claims!['cognito:groups'] as unknown as string[];
+  }
+
   public hasGroup(group: string): boolean {
     // 'cognito:groups': [ 'admin' ],
-    return this.isAuthenticated()
-      && this.claims!.hasOwnProperty('cognito:groups')
-      && (this.claims!['cognito:groups'] as unknown as string[]).includes(group);
+    return this.getGroups().includes(group);
   }
 
   public assertGroup(group: string): void {
