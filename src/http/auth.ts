@@ -115,6 +115,11 @@ export abstract class CognitoAuthorizer {
     this.assertAuthenticated();
     return this.claims!.sub as string;
   }
+
+  public getClaim(name: string): string | number | boolean | string[] | undefined {
+    this.assertAuthenticated();
+    return this.claims![name];
+  }
 }
 
 export class ApiGatewayv2CognitoAuthorizer extends CognitoAuthorizer {
