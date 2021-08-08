@@ -42,7 +42,7 @@ export interface OperationWithRequestBody extends Operation {
   requestBody: { content: { 'application/json': any } };
 }
 
-export const createOpenApiHandlerWithRequestBody = <OP extends OperationWithRequestBody, SC extends number = 200>(handler: HttpHandler<OP['requestBody']['content']['application/json'], OP['responses'][SC]['application/json']>): APIGatewayv2Handler => {
+export const createOpenApiHandlerWithRequestBody = <OP extends OperationWithRequestBody, SC extends number = 200>(handler: HttpHandler<OP['requestBody']['content']['application/json'], OP['responses'][SC]['content']['application/json']>): APIGatewayv2Handler => {
   return createHttpHandler(handler);
 };
 
