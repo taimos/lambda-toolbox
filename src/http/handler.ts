@@ -94,6 +94,18 @@ export const createHttpHandler =
             body: error.message,
           };
         }
+        if (error.isBoom) {
+          return {
+            statusCode: error.output.statusCode,
+            headers: {
+              'Content-Type': 'application/json',
+              ...error.output.headers,
+              ...corsHeader(event),
+              ...ctx.response.headers,
+            },
+            body: JSON.stringify(error.output.payload),
+          };
+        }
         ctx.logger.error(error);
         return {
           statusCode: ctx.response.statusCode ?? 500,

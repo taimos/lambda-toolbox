@@ -1,6 +1,10 @@
 {
   "dependencies": [
     {
+      "name": "@hapi/boom",
+      "type": "build"
+    },
+    {
       "name": "@taimos/projen",
       "type": "build"
     },
