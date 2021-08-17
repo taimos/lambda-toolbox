@@ -9,7 +9,6 @@ const project = new TaimosTypescriptLibrary({
     'axios',
     'uuid',
     'lambda-log',
-    '@hapi/boom',
   ],
   docgen: false,
   defaultReleaseBranch: 'main',

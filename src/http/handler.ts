@@ -1,4 +1,3 @@
-import * as Boom from '@hapi/boom'
 import logger from 'lambda-log';
 import * as errors from '../types/errors';
 import { ApiGatewayv2CognitoAuthorizer, AppSyncCognitoAuthorizer, CognitoAuthorizer } from './auth';
@@ -95,7 +94,7 @@ export const createHttpHandler =
             body: error.message,
           };
         }
-        if (error instanceof Boom.Boom) {
+        if (error.isBoom) {
           return {
             statusCode: error.output.statusCode,
             headers: {
