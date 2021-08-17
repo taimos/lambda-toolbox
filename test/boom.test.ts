@@ -1,5 +1,5 @@
-import * as Boom from '@hapi/boom'
-import { createHttpHandler } from '../src/http/handler'
+import * as Boom from '@hapi/boom';
+import { createHttpHandler } from '../src/http/handler';
 
 test('Boom error support for createHttpHandler', async () => {
   const boomErr = Boom.notImplemented();
@@ -24,6 +24,10 @@ test('Boom error support for createHttpHandler', async () => {
 
   expect(result.statusCode).toBe(501);
   expect(result.headers).not.toBeUndefined();
-  expect(result.body).not.toBeUndefined();
+
+  if (!result.body) {
+    throw new Error('result.body is expected to be defined!');
+  }
+
   expect(JSON.parse(result.body)).toEqual(boomErr.output.payload);
 });

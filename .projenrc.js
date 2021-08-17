@@ -20,6 +20,7 @@ const project = new TaimosTypescriptLibrary({
     '@types/jwk-to-pem',
     '@types/uuid',
     '@taimos/projen',
+    '@hapi/boom',
   ],
   keywords: [
     'aws',
