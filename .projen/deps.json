@@ -98,6 +98,10 @@
       "type": "build"
     },
     {
+      "name": "@hapi/boom",
+      "type": "runtime"
+    },
+    {
       "name": "aws-sdk",
       "type": "runtime"
     },

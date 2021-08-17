@@ -1,3 +1,4 @@
+import * as Boom from '@hapi/boom'
 import logger from 'lambda-log';
 import * as errors from '../types/errors';
 import { ApiGatewayv2CognitoAuthorizer, AppSyncCognitoAuthorizer, CognitoAuthorizer } from './auth';
@@ -92,6 +93,18 @@ export const createHttpHandler =
               ...ctx.response.headers,
             },
             body: error.message,
+          };
+        }
+        if (error instanceof Boom.Boom) {
+          return {
+            statusCode: error.output.statusCode,
+            headers: {
+              'Content-Type': 'application/json',
+              ...error.output.headers,
+              ...corsHeader(event),
+              ...ctx.response.headers,
+            },
+            body: JSON.stringify(error.output.payload),
           };
         }
         ctx.logger.error(error);
