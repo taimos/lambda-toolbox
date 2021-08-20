@@ -133,9 +133,21 @@
         }
       ]
     },
+    "publish:github": {
+      "name": "publish:github",
+      "description": "Publish this package to GitHub Releases",
+      "requiredEnv": [
+        "GITHUB_TOKEN"
+      ],
+      "steps": [
+        {
+          "exec": "gh release create v$(cat dist/version.txt) -R ${{ github.repository }} -F dist/changelog.md -t v$(cat dist/version.txt)"
+        }
+      ]
+    },
     "publish:npm": {
       "name": "publish:npm",
-      "description": "Publish this package to the npm Registry",
+      "description": "Publish this package to npm",
       "env": {
         "NPM_DIST_TAG": "latest",
         "NPM_REGISTRY": "registry.npmjs.org"
@@ -149,8 +161,8 @@
         }
       ]
     },
-    "upgrade-dependencies": {
-      "name": "upgrade-dependencies",
+    "upgrade": {
+      "name": "upgrade",
       "description": "upgrade dependencies",
       "env": {
         "CI": "0"
@@ -163,7 +175,7 @@
           "exec": "yarn install --check-files"
         },
         {
-          "exec": "yarn upgrade @hapi/boom @taimos/projen @types/aws-lambda @types/jest @types/jsonwebtoken @types/jwk-to-pem @types/lambda-log @types/node @types/uuid @typescript-eslint/eslint-plugin @typescript-eslint/parser eslint eslint-import-resolver-node eslint-import-resolver-typescript eslint-plugin-import jest jest-junit json-schema npm-check-updates openapi-typescript standard-version ts-jest typescript aws-sdk axios jsonwebtoken jwk-to-pem lambda-log uuid"
+          "exec": "yarn upgrade @hapi/boom @taimos/projen @types/aws-lambda @types/jest @types/jsonwebtoken @types/jwk-to-pem @types/lambda-log @types/node @types/uuid @typescript-eslint/eslint-plugin @typescript-eslint/parser eslint eslint-import-resolver-node eslint-import-resolver-typescript eslint-plugin-import jest jest-junit json-schema npm-check-updates openapi-typescript standard-version ts-jest ts-node typescript aws-sdk axios jsonwebtoken jwk-to-pem lambda-log uuid"
         },
         {
           "exec": "npx projen"
