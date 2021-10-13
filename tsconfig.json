@@ -4,11 +4,13 @@
     "outDir": "lib",
     "alwaysStrict": true,
     "declaration": true,
+    "esModuleInterop": true,
     "experimentalDecorators": true,
     "inlineSourceMap": true,
     "inlineSources": true,
     "lib": [
-      "es2018"
+      "es2019",
+      "DOM"
     ],
     "module": "CommonJS",
     "noEmitOnError": false,
@@ -23,8 +25,7 @@
     "strictNullChecks": true,
     "strictPropertyInitialization": true,
     "stripInternal": true,
-    "target": "ES2018",
-    "esModuleInterop": true
+    "target": "ES2019"
   },
   "include": [
     "src/**/*.ts"

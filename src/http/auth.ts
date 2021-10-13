@@ -37,7 +37,7 @@ const getPublicKeys = async (): Promise<MapOfKidToPublicKey> => {
   if (!cacheKeys) {
     const url = `${cognitoIssuer}/.well-known/jwks.json`;
 
-    const publicKeys: PublicKeys = (await Axios.get(url)).data;
+    const publicKeys: PublicKeys = (await Axios.get<PublicKeys>(url)).data;
     cacheKeys = publicKeys.keys.reduce((agg, current) => {
       const pem = jwkToPem(current as jwkToPem.JWK);
       agg[current.kid] = { instance: current, pem };
@@ -155,7 +155,7 @@ export class ApiGatewayv2CognitoAuthorizer extends CognitoAuthorizer {
         },
       };
       this.claims = claims;
-    } catch (err) {
+    } catch (err: any) {
       this._logger.error(err);
     }
   }

@@ -82,7 +82,7 @@ export const createHttpHandler =
           },
           body: res ? (ctx.response.json ? JSON.stringify(res) : res) : '',
         };
-      } catch (error) {
+      } catch (error: any) {
         if (error instanceof errors.HttpError) {
           return {
             statusCode: error.statusCode,
@@ -173,7 +173,7 @@ export const createAppSyncHandler =
       try {
         await ctx.cognitoAuth.authenticate();
         return await handler(ctx);
-      } catch (error) {
+      } catch (error: any) {
         ctx.logger.error(error);
         throw error;
       }
