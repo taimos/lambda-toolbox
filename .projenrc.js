@@ -29,12 +29,12 @@ const project = new TaimosTypescriptLibrary({
   ],
   tsconfig: {
     compilerOptions: {
-      lib: ['es2019', 'DOM'],
+      skipLibCheck: true,
     },
   },
   tsconfigDev: {
     compilerOptions: {
-      lib: ['es2019', 'DOM'],
+      skipLibCheck: true,
     },
   },
   repository: 'https://github.com/taimos/lambda-toolbox',
