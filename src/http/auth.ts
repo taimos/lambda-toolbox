@@ -129,7 +129,7 @@ export abstract class CognitoAuthorizer {
 
 export class ApiGatewayv2CognitoAuthorizer extends CognitoAuthorizer {
 
-  constructor(protected event: AWSLambda.APIGatewayProxyEventV2, private _logger: logger.LambdaLog) {
+  constructor(protected event: AWSLambda.APIGatewayProxyEventV2WithJWTAuthorizer, private _logger: logger.LambdaLog) {
     super();
   }
 
@@ -143,7 +143,7 @@ export class ApiGatewayv2CognitoAuthorizer extends CognitoAuthorizer {
     if (!authHeader || !authHeader.startsWith('Bearer ')) {
       return;
     }
-    const token = authHeader.substr('Bearer '.length);
+    const token = authHeader.substring('Bearer '.length);
     try {
       const claims: { [name: string]: string } = await promisedVerify(token);
       this._logger.debug(JSON.stringify(claims));
@@ -153,6 +153,8 @@ export class ApiGatewayv2CognitoAuthorizer extends CognitoAuthorizer {
           claims,
           scopes: ['openid', 'email'],
         },
+        integrationLatency: 0,
+        principalId: 'toolbox',
       };
       this.claims = claims;
     } catch (err: any) {

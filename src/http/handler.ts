@@ -36,7 +36,8 @@ export interface Operation {
   };
 }
 
-export type APIGatewayv2Handler = AWSLambda.Handler<AWSLambda.APIGatewayProxyEventV2, AWSLambda.APIGatewayProxyStructuredResultV2 | undefined>;
+export type APIGatewayv2Handler =
+  AWSLambda.Handler<AWSLambda.APIGatewayProxyEventV2WithJWTAuthorizer, AWSLambda.APIGatewayProxyStructuredResultV2 | undefined>;
 
 export interface OperationWithRequestBody extends Operation {
   requestBody: { content: { 'application/json': any } };

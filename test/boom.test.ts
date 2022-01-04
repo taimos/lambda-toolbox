@@ -1,5 +1,5 @@
 import * as Boom from '@hapi/boom';
-import { createHttpHandler } from '../src/http/handler';
+import { createHttpHandler } from '../src/http/handler';
 
 test('Boom error support for createHttpHandler', async () => {
   const boomErr = Boom.notImplemented();
@@ -14,9 +14,9 @@ test('Boom error support for createHttpHandler', async () => {
     rawPath: '/raw/path',
     rawQueryString: '',
     isBase64Encoded: false,
-  } as AWSLambda.APIGatewayProxyEventV2;
+  } as AWSLambda.APIGatewayProxyEventV2WithJWTAuthorizer;
   const context = {} as AWSLambda.Context;
-  const result = await handler(event, context, () => {});
+  const result = await handler(event, context, () => { });
 
   if (!result) {
     throw new Error('handler is expected to return a result!');
