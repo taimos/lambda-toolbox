@@ -33,7 +33,7 @@
   },
   "devDependencies": {
     "@hapi/boom": "^9.1.4",
-    "@taimos/projen": "^0.0.151",
+    "@taimos/projen": "^0.0.152",
     "@types/aws-lambda": "^8.10.95",
     "@types/jest": "^27.4.1",
     "@types/jsonwebtoken": "^8.5.8",
