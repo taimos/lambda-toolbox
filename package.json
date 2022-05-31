@@ -33,7 +33,7 @@
   },
   "devDependencies": {
     "@hapi/boom": "^9.1.4",
-    "@taimos/projen": "^0.0.181",
+    "@taimos/projen": "^0.0.182",
     "@types/aws-lambda": "^8.10.97",
     "@types/jest": "^27.5.1",
     "@types/jsonwebtoken": "^8.5.8",
@@ -52,7 +52,7 @@
     "json-schema": "^0.4.0",
     "npm-check-updates": "^12",
     "openapi-typescript": "^5.3.0",
-    "projen": "^0.56.37",
+    "projen": "^0.56.38",
     "standard-version": "^9",
     "ts-jest": "^27",
     "ts-node": "^10.8.0",
