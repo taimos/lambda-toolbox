@@ -1,13 +1,16 @@
-import { parse, UrlWithStringQuery } from 'url';
-import * as AWS from 'aws-sdk';
+import { URL } from 'url';
+import { Sha256 } from '@aws-crypto/sha256-js';
+import * as credentials from '@aws-sdk/credential-providers';
+import { HttpRequest } from '@aws-sdk/protocol-http';
+import { SignatureV4 } from '@aws-sdk/signature-v4';
 import * as axios from 'axios';
 
 export class AppSyncClient {
 
-  protected readonly graphQlServerUri: UrlWithStringQuery;
+  protected readonly graphQlServerUri: URL;
 
   constructor(protected readonly graphQlServerUrl: string, protected readonly awsRegion: string) {
-    this.graphQlServerUri = parse(this.graphQlServerUrl);
+    this.graphQlServerUri = new URL(this.graphQlServerUrl);
     if (!this.graphQlServerUri.href) {
       throw new Error('Invalid GraphQL server URL');
     }
@@ -20,22 +23,32 @@ export class AppSyncClient {
       variables,
     };
 
-    const httpRequest = new AWS.HttpRequest(new AWS.Endpoint(this.graphQlServerUri.href!), this.awsRegion);
+    const httpRequest = new HttpRequest({
+      headers: {
+        'host': this.graphQlServerUri.host!,
+        'Content-Type': 'application/json',
+      },
+      method: 'POST',
+      body: JSON.stringify(post_body),
+    });
     httpRequest.headers.host = this.graphQlServerUri.host!;
     httpRequest.headers['Content-Type'] = 'application/json';
     httpRequest.method = 'POST';
     httpRequest.body = JSON.stringify(post_body);
 
-    await ((AWS.config.credentials as AWS.Credentials)?.getPromise());
-
-    // Signers is an internal API
-    const signer = new (AWS as any).Signers.V4(httpRequest, 'appsync', true);
-    signer.addAuthorization(AWS.config.credentials, (AWS as any).util.date.getDate());
-
-    const res = await axios.default.post(this.graphQlServerUri.href!, httpRequest.body, {
-      headers: httpRequest.headers,
+    // There's now an official signature library - yay!
+    const signer = new SignatureV4({
+      credentials: credentials.fromEnv(),
+      service: 'appsync',
+      region: this.awsRegion,
+      sha256: Sha256,
     });
-    return res;
+
+    const signedRequest = await signer.sign(httpRequest, { signingDate: new Date() });
+
+    return axios.default.post(this.graphQlServerUri.href!, signedRequest.body, {
+      headers: signedRequest.headers,
+    });
   }
 
 }

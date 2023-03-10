@@ -1,0 +1,1 @@
+process.env.TABLE = 'test_table'; // Need to have this in the environment before the dynamo client is imported
