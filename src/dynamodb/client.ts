@@ -1,36 +1,41 @@
 import * as https from 'https';
 import { env } from 'process';
-import { DynamoDB } from 'aws-sdk';
+import { DynamoDBClient } from '@aws-sdk/client-dynamodb';
+import * as dynamodb from '@aws-sdk/lib-dynamodb';
+import { DynamoDBDocumentClient } from '@aws-sdk/lib-dynamodb';
+import { NodeHttpHandler } from '@aws-sdk/node-http-handler';
 import { PrimaryEntity } from './model';
 
 const agent = new https.Agent({
   keepAlive: true,
 });
-export const dynamoClient: DynamoDB.DocumentClient = new DynamoDB.DocumentClient({ httpOptions: { agent } });
+export const dynamoClient: DynamoDBDocumentClient = DynamoDBDocumentClient.from(new DynamoDBClient({
+  requestHandler: new NodeHttpHandler({ httpsAgent: agent }),
+}));
 
 export const TABLE_NAME: string = env.TABLE!;
 
-export async function getItem<E extends PrimaryEntity<any, any>>(pk: E['PK'], sk: E['SK'], options?: Omit<DynamoDB.DocumentClient.GetItemInput, 'TableName' | 'Key'>): Promise<E | undefined> {
-  const res = await dynamoClient.get({
+export async function getItem<E extends PrimaryEntity<any, any>>(pk: E['PK'], sk: E['SK'], options?: Omit<dynamodb.GetCommandInput, 'TableName' | 'Key'>): Promise<E | undefined> {
+  const res = await dynamoClient.send(new dynamodb.GetCommand({
     TableName: TABLE_NAME,
     Key: {
       PK: pk,
       SK: sk,
     },
     ...options,
-  }).promise();
+  }));
   return res.Item ? res.Item as E : undefined;
 }
 
-export async function deleteItem<E extends PrimaryEntity<any, any>>(pk: E['PK'], sk: E['SK'], options?: Omit<DynamoDB.DocumentClient.DeleteItemInput, 'TableName' | 'Key'>): Promise<void> {
-  await dynamoClient.delete({
+export async function deleteItem<E extends PrimaryEntity<any, any>>(pk: E['PK'], sk: E['SK'], options?: Omit<dynamodb.DeleteCommandInput, 'TableName' | 'Key'>): Promise<void> {
+  await dynamoClient.send(new dynamodb.DeleteCommand({
     TableName: TABLE_NAME,
     Key: {
       PK: pk,
       SK: sk,
     },
     ...options,
-  }).promise();
+  }));
 }
 
 export async function putNewItem<E extends PrimaryEntity<any, any>>(pk: E['PK'], sk: E['SK'], item: Omit<E, 'PK' | 'SK'>): Promise<E> {
@@ -39,35 +44,35 @@ export async function putNewItem<E extends PrimaryEntity<any, any>>(pk: E['PK'],
     SK: sk,
     ...item,
   };
-  await dynamoClient.put({
+  await dynamoClient.send(new dynamodb.PutCommand({
     TableName: TABLE_NAME,
     Item,
     ConditionExpression: 'attribute_not_exists(PK) and attribute_not_exists(SK)',
-  }).promise();
+  }));
   return Item as E;
 }
 
 export async function updateExistingItem<E extends PrimaryEntity<any, any>>(pk: E['PK'], sk: E['SK'], item: Partial<E>): Promise<E | undefined> {
-  const res = await dynamoClient.update(createUpdate<E>({
+  const res = await dynamoClient.send(createUpdate<E>({
     Key: {
       PK: pk,
       SK: sk,
     },
     ConditionExpression: 'attribute_exists(PK) and attribute_exists(SK)',
     ReturnValues: 'ALL_NEW',
-  }, item)).promise();
+  }, item));
   return res.Attributes ? res.Attributes as E : undefined;
 }
 
-export async function pagedQuery<T>(query: Omit<DynamoDB.DocumentClient.QueryInput, 'TableName'>): Promise<T[]> {
+export async function pagedQuery<T>(query: Omit<dynamodb.QueryCommandInput, 'TableName'>): Promise<T[]> {
   let startKey;
   const result: T[] = [];
   do {
-    const res: DynamoDB.DocumentClient.QueryOutput = await dynamoClient.query({
+    const res: dynamodb.QueryCommandOutput = await dynamoClient.send(new dynamodb.QueryCommand({
       ...query,
       TableName: TABLE_NAME,
       ExclusiveStartKey: startKey,
-    }).promise();
+    }));
     if (res.Items) {
       result.push(...res.Items as T[]);
     }
@@ -76,15 +81,15 @@ export async function pagedQuery<T>(query: Omit<DynamoDB.DocumentClient.QueryInp
   return result;
 }
 
-export async function pagedScan<T>(query: Omit<DynamoDB.DocumentClient.ScanInput, 'TableName'>): Promise<T[]> {
+export async function pagedScan<T>(query: Omit<dynamodb.ScanCommandInput, 'TableName'>): Promise<T[]> {
   let startKey;
   const result: T[] = [];
   do {
-    const res: DynamoDB.DocumentClient.ScanOutput = await dynamoClient.scan({
+    const res: dynamodb.ScanCommandOutput = await dynamoClient.send(new dynamodb.ScanCommand({
       ...query,
       TableName: TABLE_NAME,
       ExclusiveStartKey: startKey,
-    }).promise();
+    }));
     if (res.Items) {
       result.push(...res.Items as T[]);
     }
@@ -101,7 +106,7 @@ export function padLeftZeros(val: number | string | undefined) {
   return ('00' + val).slice(-2);
 }
 
-export function createUpdate<T>(request: Omit<DynamoDB.DocumentClient.UpdateItemInput, 'TableName'>, data: Partial<T>): DynamoDB.DocumentClient.UpdateItemInput {
+export function createUpdate<T>(request: Omit<dynamodb.UpdateCommandInput, 'TableName'>, data: Partial<T>): dynamodb.UpdateCommand {
   const fieldsToSet = [];
   const fieldsToRemove = [];
   const expressionNames: any = {};
@@ -129,7 +134,7 @@ export function createUpdate<T>(request: Omit<DynamoDB.DocumentClient.UpdateItem
   if (request.UpdateExpression) {
     update += request.UpdateExpression;
   }
-  return {
+  return new dynamodb.UpdateCommand({
     ...request,
     TableName: TABLE_NAME,
     UpdateExpression: update,
@@ -147,5 +152,5 @@ export function createUpdate<T>(request: Omit<DynamoDB.DocumentClient.UpdateItem
         ...expressionValues,
       },
     },
-  };
+  });
 }

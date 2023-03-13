@@ -1,7 +1,6 @@
 import { env } from 'process';
 import Axios from 'axios';
 import { JwtHeader, SigningKeyCallback, verify } from 'jsonwebtoken';
-// import jwkToPem = require('jwk-to-pem');
 import jwkToPem from 'jwk-to-pem';
 import logger from 'lambda-log';
 import { ForbiddenError, UnauthenticatedError } from '../types/errors';
