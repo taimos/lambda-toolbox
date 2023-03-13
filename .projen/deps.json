@@ -48,6 +48,14 @@
       "type": "build"
     },
     {
+      "name": "aws-sdk-client-mock",
+      "type": "build"
+    },
+    {
+      "name": "aws-sdk-client-mock-jest",
+      "type": "build"
+    },
+    {
       "name": "eslint-import-resolver-node",
       "type": "build"
     },
@@ -111,7 +119,35 @@
       "type": "build"
     },
     {
-      "name": "aws-sdk",
+      "name": "@aws-crypto/sha256-js",
+      "type": "runtime"
+    },
+    {
+      "name": "@aws-sdk/client-appsync",
+      "type": "runtime"
+    },
+    {
+      "name": "@aws-sdk/client-dynamodb",
+      "type": "runtime"
+    },
+    {
+      "name": "@aws-sdk/credential-providers",
+      "type": "runtime"
+    },
+    {
+      "name": "@aws-sdk/lib-dynamodb",
+      "type": "runtime"
+    },
+    {
+      "name": "@aws-sdk/node-http-handler",
+      "type": "runtime"
+    },
+    {
+      "name": "@aws-sdk/protocol-http",
+      "type": "runtime"
+    },
+    {
+      "name": "@aws-sdk/signature-v4",
       "type": "runtime"
     },
     {
