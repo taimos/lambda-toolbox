@@ -36,7 +36,7 @@
     "@taimos/projen": "^0.0.183",
     "@types/aws-lambda": "^8.10.97",
     "@types/jest": "^27.5.1",
-    "@types/jsonwebtoken": "^8.5.8",
+    "@types/jsonwebtoken": "^9.0.1",
     "@types/jwk-to-pem": "^2.0.1",
     "@types/lambda-log": "^2.2.1",
     "@types/node": "^14",
@@ -70,7 +70,7 @@
     "@aws-sdk/protocol-http": "^3.282.0",
     "@aws-sdk/signature-v4": "^3.282.0",
     "axios": "^0.27.2",
-    "jsonwebtoken": "^8.5.1",
+    "jsonwebtoken": "^9.0.0",
     "jwk-to-pem": "^2.0.5",
     "lambda-log": "3.1.0",
     "uuid": "^8.3.2"

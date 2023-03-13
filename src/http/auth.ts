@@ -52,10 +52,10 @@ const promisedVerify = (token: string): Promise<{ [name: string]: string }> => {
   return new Promise((resolve, reject) => {
     verify(token, (header: JwtHeader, cb: SigningKeyCallback) => {
       if (!header.kid) {
-        cb('no key id found');
+        cb(new Error('no key id found'));
       }
       getPublicKeys().then((keys) => {
-        cb(undefined, keys[header.kid!].pem);
+        cb(null, keys[header.kid!].pem);
       }, cb);
     }, { issuer: cognitoIssuer }, (err, decoded) => {
       if (err) {
