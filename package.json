@@ -63,8 +63,8 @@
   "dependencies": {
     "@aws-crypto/sha256-js": "^4.0.0",
     "@aws-sdk/client-appsync": "^3.288.0",
-    "@aws-sdk/client-dynamodb": "^3.288.0",
-    "@aws-sdk/credential-providers": "^3.288.0",
+    "@aws-sdk/client-dynamodb": "^3.347.1",
+    "@aws-sdk/credential-providers": "^3.347.1",
     "@aws-sdk/lib-dynamodb": "^3.288.0",
     "@aws-sdk/node-http-handler": "^3.282.0",
     "@aws-sdk/protocol-http": "^3.282.0",
