@@ -69,7 +69,7 @@
     "@aws-sdk/node-http-handler": "^3.282.0",
     "@aws-sdk/protocol-http": "^3.282.0",
     "@aws-sdk/signature-v4": "^3.282.0",
-    "axios": "^0.27.2",
+    "axios": "^1.6.3",
     "jsonwebtoken": "^9.0.0",
     "jwk-to-pem": "^2.0.5",
     "lambda-log": "3.1.0",
